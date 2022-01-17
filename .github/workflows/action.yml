@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: ignisda/developrs/packages/cinder/action@latest
+        uses: ignisda/developrs/packages/cinder/action@main
         with:
           cinder-endpoint: 'http://cinder.ignisda.tech'
       # Use the output from the `hello` step
