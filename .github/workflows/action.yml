@@ -1,3 +1,4 @@
+name: "Hello world"
 on: [push]
 
 jobs:
@@ -9,7 +10,7 @@ jobs:
         id: hello
         uses: ignisda/developrs/packages/cinder/action@main
         with:
-          cinder-endpoint: 'http://cinder.ignisda.tech'
+          cinder-endpoint: "http://cinder.ignisda.tech"
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "Affected projects ${{ steps.hello.outputs.affected }}"
