@@ -16,7 +16,9 @@
     "GIT_COMMITTER_EMAIL": "${localEnv:GIT_COMMITTER_EMAIL}",
     "VISUAL": "code --wait"
   },
+  "remoteUser": "node",
   "features": {
-    "IgnisDa/upgraded-adventure/fish@features-v0.0.1": {}
+    "IgnisDa/upgraded-adventure/fish@features-v0.0.1": {},
+    "IgnisDa/upgraded-adventure/volta@features-v0.0.2": {}
   }
 }

@@ -5,19 +5,14 @@ set -a
 . ./devcontainer-features.env
 set +a
 
+if [ "$(id -u)" -ne 0 ]; then
+    echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
+    exit 1
+fi
+
 if [[ -n "${_BUILD_ARG_FISH}" ]]; then
 
-    echo ${_BUILD_ARG_FISH_USERNAME} >> /log.txt
-    echo ${_BUILD_ARG_FISH} >> /log.txt
-
     USERNAME=${_BUILD_ARG_FISH_USERNAME:-"automatic"}
-
-    set -e
-
-    if [ "$(id -u)" -ne 0 ]; then
-        echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
-        exit 1
-    fi
 
     # Determine the appropriate non-root user
     if [ "${USERNAME}" = "auto" ] || [ "${USERNAME}" = "automatic" ]; then
@@ -62,7 +57,7 @@ if [[ -n "${_BUILD_ARG_FISH}" ]]; then
         apt autoremove -y
     fi
 
-    if [ "${INSTALL_FISHER}" = "true" ]; then
+    if [ "${_BUILD_ARG_FISH_FISHER}" = "true" ]; then
         # Install Fisher
         echo "Installing Fisher..."
         fish -c 'curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher'
@@ -71,5 +66,21 @@ if [[ -n "${_BUILD_ARG_FISH}" ]]; then
         fi
     fi
 
-    echo "Done!"
+elif [[ -n "${_BUILD_ARG_VOLTA}" ]]; then
+    curl https://get.volta.sh | bash
+    update() {
+        echo "Updating /etc/bash.bashrc and /etc/zsh/zshrc..."
+        if [[ "$(cat /etc/bash.bashrc)" != *"$1"* ]]; then
+            echo -e "$1" >> /etc/bash.bashrc
+        fi
+        if [ -f "/etc/zsh/zshrc" ] && [[ "$(cat /etc/zsh/zshrc)" != *"$1"* ]]; then
+            echo -e "$1" >> /etc/zsh/zshrc
+        fi
+    }
+    update "$(cat << EOF
+    export PATH="/root/.volta/bin:\${PATH}"
+EOF
+)"
 fi
+
+echo "Done!"

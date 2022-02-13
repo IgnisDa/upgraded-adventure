@@ -23,7 +23,6 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          name: features-latest
           artifactErrorsFailBuild: true
           artifacts: "./devcontainer-features.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
